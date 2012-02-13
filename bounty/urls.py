@@ -8,7 +8,9 @@ from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 # admin.autodiscover()
 
 urlpatterns = patterns(
-    url(r'^$', redirect('home')),
+	'', # "It worked!" stock hello world page
+	
+    # url(r'^$', redirect('home')),
     # Examples:
     # url(r'^$', 'app.views.home', name='home'),
     # url(r'^app/', include('app.foo.urls')),

@@ -1,4 +1,4 @@
-# Django settings for questions project.
+# Django settings for bounty project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -98,7 +98,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'questions.urls'
+ROOT_URLCONF = 'bounty.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -114,7 +114,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangorestframework',
-    'quiz',
+    'bountyboard',
     'south',   # should be last
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -144,3 +144,11 @@ LOGGING = {
         },
     }
 }
+
+
+SITE_ID = 1
+ROOT_DIR = "/home/marmida/develop/bounty-board/bounty"
+
+TEMPLATE_DIRS = (
+    "%s/templates" % ROOT_DIR
+)
