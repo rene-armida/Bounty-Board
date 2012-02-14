@@ -8,7 +8,7 @@ from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 # admin.autodiscover()
 
 urlpatterns = patterns('bounty.board.views',
-    url(r'^home/$', 'home.home'),
+    url(r'^$', 'home.home'),
     #url(r'^$', redirect('home')),
     # Examples:
     # url(r'^app/', include('app.foo.urls')),
