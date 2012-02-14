@@ -114,7 +114,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangorestframework',
-    'bountyboard',
+    'board',
     'south',   # should be last
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
