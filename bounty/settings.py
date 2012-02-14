@@ -152,3 +152,9 @@ ROOT_DIR = "/home/marmida/develop/bounty-board/bounty"
 TEMPLATE_DIRS = (
     "%s/templates" % ROOT_DIR
 )
+
+try:
+    from my_settings import *
+except ImportError:
+    pass
+
