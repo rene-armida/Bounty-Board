@@ -1,10 +1,34 @@
 from django.http import HttpResponseBadRequest
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
-from dzen.django.apps.common.views import CSRFExemptMixin, JSONResponseMixin
-from dzen.django.http import HttpResponseNotAuthorized
 from oauth2.exceptions import *
 from oauth2.provider import OAuth2Provider
 from oauth2.views import OAuth2DispatchView, OAuth2ViewMixin
+
+class CSRFExemptMixin(object):
+    'borrowed from: https://github.com/disorderlyzen/common-web/blob/master/dzen/django/apps/common/views.py'
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(CSRFExemptMixin, self).dispatch(*args, **kwargs)
+
+class JSONResponseMixin(object):
+    'borrowed from: https://github.com/disorderlyzen/common-web/blob/master/dzen/django/apps/common/views.py'
+    
+    def render_to_response(self, context, **kwargs):
+        "Returns a JSON response containing 'context' as payload"
+        return self.get_json_response(self.convert_context_to_json(context), **kwargs)
+
+    def get_json_response(self, content, **httpresponse_kwargs):
+        "Construct an `HttpResponse` object."
+        return http.HttpResponse(content,
+                                 content_type='application/json',
+                                 **httpresponse_kwargs)
+
+    def convert_context_to_json(self, context):
+        "Convert the context dictionary into a JSON object"
+        return json.dumps(context)
+
 
 class TokenView(OAuth2ViewMixin, View):
     def post(self, request, *args, **kwargs):

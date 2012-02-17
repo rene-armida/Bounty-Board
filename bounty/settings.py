@@ -1,5 +1,7 @@
 # Django settings for bounty project.
 
+import os # for os.environ
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -12,7 +14,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',    # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db/questions.db',                 # Or path to database file if using sqlite3.
+        'NAME': '/home/marmida/develop/bounty-board/db/questions.db',                 # Or path to database file if using sqlite3.
         'USER': '',                                # Not used with sqlite3.
         'PASSWORD': '',                            # Not used with sqlite3.
         'HOST': '',                                # Set to empty string for localhost. Not used with sqlite3.
@@ -81,7 +83,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'dvou(h4gaz3@g%t9rs%)7x#ns*yumjc_4)v3k)54exhf&8llf$'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY'] # use heroku config
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -115,10 +117,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'djangorestframework',
     'board',
+    'django.contrib.admin',
     'south',   # should be last
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
+    
     # 'django.contrib.admindocs',
 )
 
@@ -144,6 +145,11 @@ LOGGING = {
         },
     }
 }
+
+# meetup oauth api settings
+MEETUP_OAUTH2_CLIENT_ID = os.environ['MEETUP_OAUTH2_CLIENT_ID'] # the "Consumer key" (oauth1 parlance) doubles as the oauth2 client_id
+MEETUP_REDIRECT_URI = os.environ['MEETUP_REDIRECT_URI']
+MEETUP_AUTHORIZATION_URL = 'https://secure.meetup.com/oauth2/authorize'
 
 
 SITE_ID = 1

@@ -7,8 +7,8 @@ from bounty.oauth2.views.token import TokenViewDispatcher
 
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('bounty.board.views',
     url(r'^$', 'home.home'),
@@ -20,10 +20,11 @@ urlpatterns = patterns('bounty.board.views',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 
     # oauth2 urls
     # todo: maybe move to a separate urlconf
+    url(r'^login/$', 'login.login'),
     url(r'^authorize/$', AuthorizeViewDispatcher.as_view(), name='authorize'),
     url(r'^token/$', TokenViewDispatcher.as_view(), name='token'),
 

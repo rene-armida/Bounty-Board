@@ -1,5 +1,6 @@
 from django.http import HttpResponseBadRequest
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 from oauth2.exceptions import *
 from oauth2.provider import OAuth2Provider
@@ -8,7 +9,7 @@ from oauth2.views import OAuth2DispatchView, OAuth2ViewMixin
 class ProtectedViewMixin(object):
     '''
     borrowed from: https://github.com/disorderlyzen/common-web/blob/master/dzen/django/apps/common/views.py
-    
+
     overrides normal dispatch; makes every view method require login
     follows class-based views: https://docs.djangoproject.com/en/dev/topics/class-based-views
     '''

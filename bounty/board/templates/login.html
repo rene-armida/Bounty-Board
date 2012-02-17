@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% comment %}
+Login via oauth2 and meetup's API
+Assumes the current user is logged into django - this will need to change
+{% endcomment %}
+
+{% block 'contents' %}
+	<a href="{{dest}}">log in via meetup</a>
+{% endblock %}
