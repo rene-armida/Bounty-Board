@@ -1,9 +1,21 @@
 from django.http import HttpResponseBadRequest
+from django.utils.decorators import method_decorator
 from django.views.generic import RedirectView
-from dzen.django.apps.common.views import ProtectedViewMixin
 from oauth2.exceptions import *
 from oauth2.provider import OAuth2Provider
 from oauth2.views import OAuth2DispatchView, OAuth2ViewMixin
+
+class ProtectedViewMixin(object):
+    '''
+    borrowed from: https://github.com/disorderlyzen/common-web/blob/master/dzen/django/apps/common/views.py
+    
+    overrides normal dispatch; makes every view method require login
+    follows class-based views: https://docs.djangoproject.com/en/dev/topics/class-based-views
+    '''
+    @method_decorator(login_required) # method_decorator: convert login_required from a function to a method decorator
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedViewMixin, self).dispatch(*args, **kwargs)
+
 
 class AuthorizeView(OAuth2ViewMixin, RedirectView):
     permanent = False
