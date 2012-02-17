@@ -36,11 +36,12 @@ Running It
 
 1. login into django via https: https://yourapp.herokuapp.com/admin/
 
-   Yes, this is a crutch, and should not be necessary.
+    Yes, this is a crutch, and should not be necessary.
 
 2. get the login link for meetup, and verify the query components: http://yourapp.herokuapp.com/login/
    
-   Your client id and redirect URI should show up in the link.
+    Your client id and redirect URI should show up in the link.
+
 3. Click the link and go to Meetup
 4. Authorize the request on Meetup
 5. You should be redirected to your bounty board instance
