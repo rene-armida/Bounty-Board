@@ -57,9 +57,9 @@ def authorize(request):
 		'redirect_uri': settings.MEETUP_REDIRECT_URI,
 		'code': request.GET['code'],
 	})
-	print 'post_data', post_data
 	# note: urllib2.urlopen doesn't verify server's cert; is this a security hole?
 	response = urllib2.urlopen(settings.MEETUP_TOKEN_URL, post_data)
+	print 'response headers', response.info().headers
 
 	# interpret the response as JSON content; both success and failure use this response type
 	# if a lower-level failure occurred, like the connection not being made, we assume urlopen
