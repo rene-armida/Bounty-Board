@@ -11,6 +11,9 @@ def require_https(fn):
 	'''
 	decorate a view to raise 403 (forbidden) if we're not connected via HTTPS
 
+	NOTE: not used; heroku's routing mesh will proxy as HTTP, so everything will
+	appear as if the browser had requested in the clear.
+
 	replace this with 'raise Http403' when that gets released
 	see: https://docs.djangoproject.com/en/dev/topics/http/views/#the-403-http-forbidden-view
 	'''
@@ -32,7 +35,7 @@ def login(request):
 		}
 	)
 
-@require_https
+# @require_https
 def authorize(request):
 	'''
 	receive an auth code from Meetup; store the auth code and state
@@ -54,13 +57,14 @@ def authorize(request):
 		'redirect_uri': settings.MEETUP_REDIRECT_URI,
 		'code': request.GET['code'],
 	})
+	print 'post_data', post_data
 	# note: urllib2.urlopen doesn't verify server's cert; is this a security hole?
 	response = urllib2.urlopen(settings.MEETUP_TOKEN_URL, post_data)
 
 	# interpret the response as JSON content; both success and failure use this response type
 	# if a lower-level failure occurred, like the connection not being made, we assume urlopen
 	# will have raised a URLError.
-	response = json.loads(response)
+	response = json.loads(response.read())
 	if 'error' in response:
 		raise Exception('Meetup access token request failed: %s' % response['error'])
 	
