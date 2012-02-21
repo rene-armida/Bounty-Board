@@ -52,7 +52,7 @@ def authorize(request):
 		'client_id': settings.MEETUP_OAUTH2_CLIENT_ID,
 		'grant_type': 'authorization_code',
 		'redirect_uri': settings.MEETUP_REDIRECT_URI,
-		'code': request.GET['code']
+		'code': request.GET['code'],
 	})
 	# note: urllib2.urlopen doesn't verify server's cert; is this a security hole?
 	response = urllib2.urlopen(settings.MEETUP_TOKEN_URL, post_data)

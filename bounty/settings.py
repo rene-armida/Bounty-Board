@@ -152,7 +152,7 @@ LOGGING = {
 # meetup stuff - if these variables exist in the environment, copy them into this module
 for i in ['MEETUP_AUTHORIZATION_URL', 'MEETUP_OAUTH2_CLIENT_ID', 'MEETUP_TOKEN_URL', 'MEETUP_REDIRECT_URI']:
     if i in os.environ:
-        globals[i] = os.environ[i]
+        globals()[i] = os.environ[i]
 
 
 SITE_ID = 1
