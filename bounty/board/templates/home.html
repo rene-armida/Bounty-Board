@@ -1,5 +1,80 @@
 {% extends 'base.html' %}
 
-{% block 'contents' %}
-<h1>Welcome Home!</h1>
+{% block contents %}
+<h1>Hacks</h1>
+
+<ul id="hacklist">
+</ul>
+
+{% comment %}
+FIXME: moving this stuff into the doc's head causes problems, like '$' not being defined.
+{% endcomment %}
+
+<script src="/static/js/jquery-1.7.1.min.js"></script>
+<script src="/static/js/underscore-min.js"></script>
+<script src="/static/js/backbone-min.js"></script>
+
+<script type="text/template" id="tpl-hack-list-item">
+	<p><%= name %></p>
+</script>
+	
+<script>
+$(document).ready( function() {
+	
+	// models
+	window.Hack = Backbone.Model.extend({
+		
+	})
+
+	// collections
+	window.HackCollection = Backbone.Collection.extend({
+		model: Hack,
+		url: '/api/hacks',
+	})
+
+	// views
+	window.HackListView = Backbone.View.extend({
+		tagName: 'ul',
+
+		initialize: function() {
+			this.model.bind("reset", this.render, this);
+		},
+
+		render: function(eventName) {
+			_.each(this.model.models, function(hack) {
+				$(this.el).append(new HackListItemView({model:hack}).render().el);
+			}, this);
+			return this;
+		}
+	})
+
+	window.HackListItemView = Backbone.View.extend({
+		tagName: 'li',
+		template: _.template($('#tpl-hack-list-item').html()),
+
+		render: function(eventName) {
+			$(this.el).html(this.template(this.model.toJSON()))
+			return this
+		},
+	})
+
+	// routes
+	var AppRouter = Backbone.Router.extend({
+		routes: {
+			'': 'list',
+		},
+
+		list: function() {
+			this.hackList = new HackCollection()
+			this.hackListView = new HackListView({model: this.hackList})
+			this.hackList.fetch()
+			$('#hacklist').html(this.hackListView.render().el);
+		},
+	})
+
+	// run it
+	var app = new AppRouter()
+	Backbone.history.start()
+});
+</script>
 {% endblock %}

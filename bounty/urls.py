@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.shortcuts import redirect
+from bounty.board import models
 from djangorestframework.resources import ModelResource
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 
@@ -7,15 +8,18 @@ from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from django.contrib import admin
 admin.autodiscover()
 
+# REST resources
+class HackResource(ModelResource):
+	model = models.Hack
+
+
 urlpatterns = patterns('bounty.board.views',
     url(r'^$', 'home.home'),
     #url(r'^$', redirect('home')),
-    # Examples:
-    # url(r'^app/', include('app.foo.urls')),
+    
+    # RESTful API
+    url(r'^api/hacks$', ListOrCreateModelView.as_view(resource=HackResource)),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+    # standard django admin
     url(r'^admin/', include(admin.site.urls)),
 )

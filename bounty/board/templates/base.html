@@ -1,9 +1,16 @@
-
+<!DOCTYPE html>
 <html>
 	<head>
+		{% block head %}
+			<title>Bounty Board - SF Python Hack Night</title>
+
+			{% comment %}'inhead' is an optional block used for injecting stuff into the doc's head{% endcomment %}
+			{% block inhead %}
+			{% endblock inhead %}
+		{% endblock head %}
 	</head>
 	<body>
-		{% block 'contents' %}
-		{% endblock %}
+		{% block contents %}
+		{% endblock contents %}
 	</body>
 </html>
