@@ -3,8 +3,12 @@
 {% block contents %}
 <h1>Hacks</h1>
 
-<ul id="hacklist">
-</ul>
+<div id="rcol">
+</div>
+<div id="lcol">
+	<ul id="hacklist">
+	</ul>
+</div>
 
 {% comment %}
 FIXME: moving this stuff into the doc's head causes problems, like '$' not being defined.
@@ -15,7 +19,8 @@ FIXME: moving this stuff into the doc's head causes problems, like '$' not being
 <script src="/static/js/backbone-min.js"></script>
 
 <script type="text/template" id="tpl-hack-list-item">
-	<p><%= name %></p>
+	<h2><%= name %></h2>
+	<p><%= abstract %></p>
 </script>
 	
 <script>
@@ -55,6 +60,18 @@ $(document).ready( function() {
 		render: function(eventName) {
 			$(this.el).html(this.template(this.model.toJSON()))
 			return this
+		},
+
+		highlight: function() {
+			// unhighlight any previously-highlighted elements
+			$('.highlight').removeClass('highlight')
+
+			// style the element
+			$(this.el).addClass('highlight')
+		},
+
+		events: {
+			"click": "highlight",
 		},
 	})
 
