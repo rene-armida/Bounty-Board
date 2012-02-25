@@ -22,6 +22,12 @@ FIXME: moving this stuff into the doc's head causes problems, like '$' not being
 	<h2><%= name %></h2>
 	<p><%= abstract %></p>
 </script>
+
+<script type="text/template" id="tpl-hack-detail">
+	<h2><%= name %></h2>
+	<h3><%= abstract %></h3>
+	<p><%= description %></p>
+</script>
 	
 <script>
 $(document).ready( function() {
@@ -47,7 +53,8 @@ $(document).ready( function() {
 
 		render: function(eventName) {
 			_.each(this.model.models, function(hack) {
-				$(this.el).append(new HackListItemView({model:hack}).render().el);
+				// pass detailView down to list item views
+				this.$el.append(new HackListItemView({model:hack, detailView: this.options.detailView}).render().el);
 			}, this);
 			return this;
 		}
@@ -58,7 +65,7 @@ $(document).ready( function() {
 		template: _.template($('#tpl-hack-list-item').html()),
 
 		render: function(eventName) {
-			$(this.el).html(this.template(this.model.toJSON()))
+			this.$el.html(this.template(this.model.toJSON()))
 			return this
 		},
 
@@ -67,11 +74,30 @@ $(document).ready( function() {
 			$('.highlight').removeClass('highlight')
 
 			// style the element
-			$(this.el).addClass('highlight')
+			this.$el.addClass('highlight')
+
+			// poke the detail view into refreshing
+			this.options.detailView.newSelection(this.model)
 		},
 
 		events: {
 			"click": "highlight",
+		},
+	})
+
+	window.HackDetailView = Backbone.View.extend({
+		tagName: 'div',
+		template: _.template($('#tpl-hack-detail').html()),
+
+		render: function(eventName) {
+			this.$el.html(this.template(this.model.toJSON()))
+			
+			return this
+		},
+
+		newSelection: function(hack) {
+			this.model = hack
+			this.render()
 		},
 	})
 
@@ -82,10 +108,15 @@ $(document).ready( function() {
 		},
 
 		list: function() {
+			// create the detail view and hang on to a reference to it
+			this.hackDetailView = new HackDetailView({el: $('#rcol')})
+			
 			this.hackList = new HackCollection()
-			this.hackListView = new HackListView({model: this.hackList})
+			// provide detail view to hack list, so it can communicate with it when the selection changes
+			this.hackListView = new HackListView({model: this.hackList, detailView: this.hackDetailView})
 			this.hackList.fetch()
 			$('#hacklist').html(this.hackListView.render().el);
+
 		},
 	})
 
