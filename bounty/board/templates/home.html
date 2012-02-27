@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% block contents %}
-<h1>Hacks</h1>
+{% block pagetitle%}Hacks{%endblock%}
 
+{% block contents %}
 <div id="rcol">
 </div>
 <div id="lcol">
-	<ul id="hacklist">
-	</ul>
 </div>
 
 {% comment %}
@@ -46,6 +44,7 @@ $(document).ready( function() {
 	// views
 	window.HackListView = Backbone.View.extend({
 		tagName: 'ul',
+		id: 'hacklist',
 
 		initialize: function() {
 			this.model.bind("reset", this.render, this);
@@ -115,7 +114,7 @@ $(document).ready( function() {
 			// provide detail view to hack list, so it can communicate with it when the selection changes
 			this.hackListView = new HackListView({model: this.hackList, detailView: this.hackDetailView})
 			this.hackList.fetch()
-			$('#hacklist').html(this.hackListView.render().el);
+			$('#lcol').html(this.hackListView.render().el);
 
 		},
 	})

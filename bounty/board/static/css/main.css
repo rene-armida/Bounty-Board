@@ -1,12 +1,64 @@
+body {
+	margin: 0; /* for full bleed of the masthead */
+}
+
+#masthead {
+	background-color: #C6E1C0;
+	padding: 6px 0;
+}
+
+#masthead h1, #masthead h2 {
+	font-size: 12px;
+	font-weight: bold;
+	margin: 5px;
+	text-transform: uppercase;
+	letter-spacing: 1.6px;
+}
+
+#masthead h1 {
+	margin-left: 20px;
+}
+
+#masthead h2 {
+	position: absolute;
+	right: 20px;
+	top: 0;
+}
+
 #rcol {
-	float: right;
+	position: fixed;
+	left: 345px;
 }
 
 #lcol {
-	min-width: 300px;
-	max-width: 500px;
+	width: 300px;
 }
 
-.highlight {
-	background-color: #aaa;
+br {
+	clear: both;
+	width: 0;
+	height: 0;
+	line-height: 0;
+}
+
+#hacklist {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#hacklist li {
+	background-color: #F0F0F0;
+	padding: 12px 20px;
+	border-right: 2px solid #aaa;
+}
+
+#hacklist li.highlight {
+	background-color: #fff;
+	border-right: none;
+}
+
+#hacklist h2 {
+	margin: 0;
+	font-size: 17px;
 }
