@@ -34,13 +34,6 @@ body {
 	width: 300px;
 }
 
-br {
-	clear: both;
-	width: 0;
-	height: 0;
-	line-height: 0;
-}
-
 #hacklist {
 	list-style-type: none;
 	padding: 0;

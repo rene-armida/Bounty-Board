@@ -8,9 +8,10 @@ class Hack(models.Model):
 	name = models.CharField(max_length=50, help_text='Short name for this idea or project')
 	abstract = models.CharField(max_length=150, help_text='A one-line description', blank=True)
 	description = models.TextField(blank=True)
-	source_url = models.URLField(verify_exists=False, help_text='Where to get the source code for this project')
+	source_url = models.URLField(verify_exists=False, help_text='Where to get the source code for this project', 
+		blank=True)
 	author = models.ForeignKey(django.contrib.auth.models.User, help_text='Proposer of this project')
-	tags = models.ManyToManyField('Tag')
+	tags = models.ManyToManyField('Tag', blank=True)
 
 	def __unicode__(self):
 		return self.name
