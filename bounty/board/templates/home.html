@@ -16,28 +16,37 @@ FIXME: moving this stuff into the doc's head causes problems, like '$' not being
 <script src="/static/js/underscore-min.js"></script>
 <script src="/static/js/backbone-min.js"></script>
 <script src="/static/js/mustache.js"></script>
+<script src="/static/js/Markdown.Converter.js"></script>
 
 <script type="text/template" id="tpl-hack-list-item">
 	<h2>[[ name ]]</h2>
 	<p>[[ abstract ]]</p>
 </script>
 
+<!-- todo: consider using function callbacks via mustache: <p>[[#markdown]] [[description]] [[/markdown]]</p> -->
 <script type="text/template" id="tpl-hack-detail">
 	<h2>[[ name ]]</h2>
 	<h3>[[ abstract ]]</h3>
-	<p>[[ description ]]</p>
+	<p>[[[ description ]]]</p>
+
+	<div class="credits">
+		<p><span>Proposed by:</span> [[author.username]] </p>
+	</div>
 </script>
 	
 <script>
 $(document).ready( function() {
 	window.mustacheTemplate = function(id) {
 		// hack: avoid Django's insistence on parsing all instances of {{ and }}
-		return $(id).html().replace(/\[\[/g, '{% templatetag openvariable %}').replace(/\]\]/g, '{% templatetag closevariable %}')
+		// first replace triple mustaches for any text rendered by Markdown
+		triple_escape = $(id).html().replace(/\[\[\[/g, '{% templatetag openvariable %}{').replace(/\]\]\]/g, '{% templatetag closevariable %}}')
+		// now replace the regular double mustaches
+		return triple_escape.replace(/\[\[/g, '{% templatetag openvariable %}').replace(/\]\]/g, '{% templatetag closevariable %}')
 	}
 	
 	// models
 	window.Hack = Backbone.Model.extend({
-		
+		// no defaults necessary?
 	})
 
 	// collections
@@ -94,7 +103,13 @@ $(document).ready( function() {
 		template: mustacheTemplate('#tpl-hack-detail'),
 
 		render: function(eventName) {
-			this.$el.html(Mustache.render(this.template, this.model.toJSON()))
+			view = this.model.toJSON()
+			// todo: make this generic, so not every rendering function needs to implement their own call to Markdown.Converter
+			// todo: add markdown sanitizer
+			converter = new Markdown.Converter();
+			view.description = converter.makeHtml(view.description)
+			console.log(view)
+			this.$el.html(Mustache.render(this.template, view))
 			
 			return this
 		},
