@@ -68,3 +68,9 @@ a, a:visited {
 	margin: 0;
 	font-size: 17px;
 }
+
+span {
+	font-weight: bold;
+	font-size: 80%;
+	text-transform: uppercase;
+}

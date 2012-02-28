@@ -30,12 +30,12 @@ FIXME: moving this stuff into the doc's head causes problems, like '$' not being
 	<p>[[[ description ]]]</p>
 
 	<div class="credits">
-		<p><span>Proposed by:</span> [[author.username]] </p>
+		<p><span>Proposed by:</span> <a href="#user/[[author.username]]">[[author.username]]</a></p>
 	</div>
 
-	<p>Tagged: 
+	<p><span>Tagged:</span> 
 	[[#tags]]
-		<a href="/tag/[[slug]]">[[name]]</a>&nbsp;&nbsp; 
+		<a href="#tag/[[slug]]">[[name]]</a>&nbsp;&nbsp; 
 	[[/tags]]
 	</p>
 </script>
@@ -129,6 +129,8 @@ $(document).ready( function() {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			'': 'list',
+			'user/:username': 'profile',
+			'tag/:tagname': 'tag',
 		},
 
 		list: function() {
@@ -142,6 +144,16 @@ $(document).ready( function() {
 			$('#lcol').html(this.hackListView.render().el);
 
 		},
+
+		profile: function(username) {
+			// show a user's details and related hacks
+			alert('AppRouter#profile: implement me')
+		},
+
+		tag: function(tagname) {
+			// show hacks associatde with a tag
+			alert('AppRouter#tag: implement me')
+		}
 	})
 
 	// run it
