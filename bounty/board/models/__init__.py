@@ -19,6 +19,10 @@ class Hack(models.Model):
 class Tag(models.Model):
 	'Keywords that describe and group Hacks'
 	name = models.CharField(max_length=40, unique=True)
+	slug = models.SlugField(unique=True)
 
 	def __unicode__(self):
 		return self.name
+
+	class Meta(object):
+		ordering = ['name']
