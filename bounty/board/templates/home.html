@@ -15,20 +15,25 @@ FIXME: moving this stuff into the doc's head causes problems, like '$' not being
 <script src="/static/js/jquery-1.7.1.min.js"></script>
 <script src="/static/js/underscore-min.js"></script>
 <script src="/static/js/backbone-min.js"></script>
+<script src="/static/js/mustache.js"></script>
 
 <script type="text/template" id="tpl-hack-list-item">
-	<h2><%= name %></h2>
-	<p><%= abstract %></p>
+	<h2>[[ name ]]</h2>
+	<p>[[ abstract ]]</p>
 </script>
 
 <script type="text/template" id="tpl-hack-detail">
-	<h2><%= name %></h2>
-	<h3><%= abstract %></h3>
-	<p><%= description %></p>
+	<h2>[[ name ]]</h2>
+	<h3>[[ abstract ]]</h3>
+	<p>[[ description ]]</p>
 </script>
 	
 <script>
 $(document).ready( function() {
+	window.mustacheTemplate = function(id) {
+		// hack: avoid Django's insistence on parsing all instances of {{ and }}
+		return $(id).html().replace(/\[\[/g, '{% templatetag openvariable %}').replace(/\]\]/g, '{% templatetag closevariable %}')
+	}
 	
 	// models
 	window.Hack = Backbone.Model.extend({
@@ -61,10 +66,10 @@ $(document).ready( function() {
 
 	window.HackListItemView = Backbone.View.extend({
 		tagName: 'li',
-		template: _.template($('#tpl-hack-list-item').html()),
+		template: mustacheTemplate('#tpl-hack-list-item'),
 
 		render: function(eventName) {
-			this.$el.html(this.template(this.model.toJSON()))
+			this.$el.html(Mustache.render(this.template, this.model.toJSON()))
 			return this
 		},
 
@@ -86,10 +91,10 @@ $(document).ready( function() {
 
 	window.HackDetailView = Backbone.View.extend({
 		tagName: 'div',
-		template: _.template($('#tpl-hack-detail').html()),
+		template: mustacheTemplate('#tpl-hack-detail'),
 
 		render: function(eventName) {
-			this.$el.html(this.template(this.model.toJSON()))
+			this.$el.html(Mustache.render(this.template, this.model.toJSON()))
 			
 			return this
 		},
