@@ -108,7 +108,6 @@ $(document).ready( function() {
 			// todo: add markdown sanitizer
 			converter = new Markdown.Converter();
 			view.description = converter.makeHtml(view.description)
-			console.log(view)
 			this.$el.html(Mustache.render(this.template, view))
 			
 			return this
