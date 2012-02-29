@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',    # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db/questions.db',                 # Or path to database file if using sqlite3.
+        'NAME': 'db/bounty.db',                    # Or path to database file if using sqlite3.
         'USER': '',                                # Not used with sqlite3.
         'PASSWORD': '',                            # Not used with sqlite3.
         'HOST': '',                                # Set to empty string for localhost. Not used with sqlite3.
@@ -114,10 +114,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangorestframework',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    
-
+    'django_nose',
     'board',
     'south',   # should be last
     # Uncomment the next line to enable admin documentation:
@@ -154,6 +152,8 @@ ROOT_DIR = "/home/marmida/develop/bounty-board/bounty"
 TEMPLATE_DIRS = (
     "%s/templates" % ROOT_DIR
 )
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 try:
     from my_settings import *
