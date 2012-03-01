@@ -2,3 +2,4 @@ pytest
 nose
 django-nose
 ipython
+django-jasmine
