@@ -1,5 +1,7 @@
 # Django settings for bounty project.
 
+import os
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -146,7 +148,7 @@ LOGGING = {
 }
 
 
-SITE_ID = 1
+SITE_ID = os.environ.get("BOUNTY_SITE_ID") or 1 
 ROOT_DIR = "/home/marmida/develop/bounty-board/bounty"
 
 TEMPLATE_DIRS = (
