@@ -3,3 +3,5 @@ django_nose
 south
 djangorestframework
 psycopg2
+django-social-auth
+django-meetup-auth

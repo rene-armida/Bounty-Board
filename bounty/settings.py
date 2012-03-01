@@ -1,3 +1,5 @@
+import os
+
 # Django settings for bounty project.
 
 DEBUG = True
@@ -117,9 +119,26 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django_nose',
     'board',
+    'social_auth',
+    'meetup_auth',
     'south',   # should be last
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'meetup_auth.backend.MeetupBackend',
+)
+
+SOCIAL_AUTH_IMPORT_BACKENDS = (
+    'meetup_auth',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'social_auth.context_processors.social_auth_by_name_backends',
+    'social_auth.context_processors.social_auth_backends',
+    'social_auth.context_processors.social_auth_by_type_backends',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -145,6 +164,10 @@ LOGGING = {
     }
 }
 
+# heroku integration: inspect os.environ and copy certain env keys into this module
+for var_name in ['MEETUP_CONSUMER_KEY', 'MEETUP_CONSUMER_SECRET']:
+    if var_name in os.environ:
+        globals()[var_name] = os.environ[var_name]
 
 SITE_ID = 1
 ROOT_DIR = "/home/marmida/develop/bounty-board/bounty"

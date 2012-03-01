@@ -20,6 +20,9 @@ urlpatterns = patterns('bounty.board.views',
     # RESTful API
     url(r'^api/hacks$', ListOrCreateModelView.as_view(resource=HackResource)),
 
+    # for Meetup API 
+    url(r'', include('social_auth.urls')),
+
     # standard django admin
     url(r'^admin/', include(admin.site.urls)),
 )
