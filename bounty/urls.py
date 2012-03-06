@@ -25,4 +25,7 @@ urlpatterns = patterns('bounty.board.views',
 
     # standard django admin
     url(r'^admin/', include(admin.site.urls)),
+
+    # debugging
+    url(r'^accounts/profile', 'debug.dump_user_info'),
 )
