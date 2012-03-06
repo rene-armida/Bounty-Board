@@ -128,6 +128,7 @@ INSTALLED_APPS = (
 
 AUTHENTICATION_BACKENDS = (
     'meetup_auth.backend.MeetupBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_IMPORT_BACKENDS = (
