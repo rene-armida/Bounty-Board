@@ -2,6 +2,34 @@ import settings
 
 from django.db import models
 import django.contrib.auth.models
+from django.core.signals import request_started
+from django.dispatch import receiver
+
+# signals
+@receiver(request_started)
+def monkey_patch_redirect_uri(sender, **kwargs):
+	'''
+	Apply a cheesy hack to fix a glitch in social_auth: 
+	* social_auth.backends.BaseOAuth2.__init__ calculates self.redirect_uri using request.build_absolute_uri
+	* django.http.request.build_absolute_uri uses the scheme of the current request
+	* if you're using heroku, or the app is behind a reverse proxy, all requests appear to be over HTTP, not HTTPS
+	* thus all redirect_uris specified to the OAuth2 provider specify HTTP, causing problems
+
+	This patch moves the 'redirect_uri' attrib to '_redirect_uri', and then substitutes a getter/setter combo
+	to replace URLs starting with 'http://' with 'https://'.
+
+	To use it, put this into something loaded early by Django - your app's models.py might be a good place.
+	'''
+	import social_auth.backends
+	def set_redirect_uri(self, redirect_uri):
+		self._redirect_uri = redirect_uri
+ 
+	def get_redirect_uri(self):
+	    return self._redirect_uri.replace('http://', 'https://') if self._redirect_uri.startswith('http://') else self._redirect_uri
+
+	social_auth.backends.BaseOAuth2.redirect_uri = property(get_redirect_uri, set_redirect_uri)
+
+# models
 
 class Hack(models.Model):
 	'Represents a project or idea for collaborative effort at Hack Night events'
