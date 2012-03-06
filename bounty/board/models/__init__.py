@@ -17,10 +17,10 @@ def monkey_patch_redirect_uri(sender, **kwargs):
 
 	This patch moves the 'redirect_uri' attrib to '_redirect_uri', and then substitutes a getter/setter combo
 	to replace URLs starting with 'http://' with 'https://'.
+
+	To use it, put this into something loaded early by Django - your app's models.py might be a good place.
 	'''
-	# print 'applying monkey patch...'
 	import social_auth.backends
-	import types
 	def set_redirect_uri(self, redirect_uri):
 		self._redirect_uri = redirect_uri
  
