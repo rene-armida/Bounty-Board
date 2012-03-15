@@ -4,7 +4,11 @@ window.bounty = {}
 
 // models
 window.bounty.Hack = Backbone.Model.extend({
-	// no defaults necessary?
+	schema: {
+		name: {},
+		abstract: {},
+		description: {},
+	},
 })
 
 // collections
@@ -90,6 +94,17 @@ window.bounty.HackDetailView = Backbone.View.extend({
 	},
 })
 
+window.bounty.HackEditView = Backbone.View.extend({
+	render: function() {
+		var form = new Backbone.Form({
+			model: new window.bounty.Hack(),
+		}).render()
+
+		this.$el.append(form.el)
+		return this
+	},
+})
+
 // hooks for invocation by django templates
 window.bounty.home_view = function() {
 	// routes
@@ -108,7 +123,7 @@ window.bounty.home_view = function() {
 			// provide detail view to hack list, so it can communicate with it when the selection changes
 			this.hackListView = new window.bounty.HackListView({model: this.hackList, detailView: this.hackDetailView})
 			this.hackList.fetch()
-			$('#lcol').html(this.hackListView.render().el);
+			$('#lcol').append(this.hackListView.render().el);
 
 		},
 

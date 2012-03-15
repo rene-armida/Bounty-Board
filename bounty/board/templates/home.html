@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
-{% block pagetitle%}Hacks{%endblock%}
-
 {% block contents %}
+
 <div id="rcol">
 </div>
 <div id="lcol">
+	<button id="add-hack">New hack</button>
+	<h1>Hacks</h1>
 </div>
 
 {% comment %}
@@ -15,32 +16,11 @@ FIXME: moving this stuff into the doc's head causes problems, like '$' not being
 <script src="/static/js/jquery-1.7.1.min.js"></script>
 <script src="/static/js/underscore-min.js"></script>
 <script src="/static/js/backbone-min.js"></script>
+<script src="/static/js/backbone-forms.js"></script>
 <script src="/static/js/mustache.js"></script>
 <script src="/static/js/Markdown.Converter.js"></script>
 <script src="/static/js/bounty.js"></script>
 
-<script type="text/template" id="tpl-hack-list-item">
-	<h2>[[ name ]]</h2>
-	<p>[[ abstract ]]</p>
-</script>
-
-<!-- todo: consider using function callbacks via mustache: <p>[[#markdown]] [[description]] [[/markdown]]</p> -->
-<script type="text/template" id="tpl-hack-detail">
-	<h2>[[ name ]]</h2>
-	<h3>[[ abstract ]]</h3>
-	<p>[[[ description ]]]</p>
-
-	<div class="credits">
-		<p><span>Proposed by:</span> <a href="#user/[[author.username]]">[[author.username]]</a></p>
-	</div>
-
-	<p><span>Tagged:</span> 
-	[[#tags]]
-		<a href="#tag/[[slug]]">[[name]]</a>&nbsp;&nbsp; 
-	[[/tags]]
-	</p>
-</script>
-	
 <script>
 $(document).ready( function() {
 	bounty.home_view()
