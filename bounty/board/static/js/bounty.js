@@ -56,15 +56,31 @@ window.bounty.HackListControlsView = Backbone.View.extend({
 
 })
 
+window.bounty.HackControlsView = Backbone.View.extend({
+	tagName: 'div',
+	className: 'controls',
+	template: '\
+		<button>Like ({{numLike}})</button> \
+		<button>Pledge ({{numPledged}})</button> \
+		',
+	render: function(eventName) {
+		// todo: correct like and pledge counts
+		this.$el.html(Mustache.render(this.template, {numLike: 0, numPledged: 0}))
+		return this
+	}
+})
+
 window.bounty.HackListItemView = Backbone.View.extend({
 	tagName: 'li',
 	template: '\
-		<h2>{{ name }}</h2>\
+		<h2><a href="#hack/{{id}}">{{ name }}</a></h2>\
 		<p>By <a href="#user/{{author.username}}">{{author.first_name}} {{author.last_name}}</a></p>\
 		<p>{{ abstract }}</p>',
 
 	render: function(eventName) {
 		this.$el.html(Mustache.render(this.template, this.model.toJSON()))
+		var controls = new window.bounty.HackControlsView({model: this.model})
+		this.$el.find('h2').before(controls.render().el)
 		return this
 	},
 
@@ -84,13 +100,26 @@ window.bounty.HackListItemView = Backbone.View.extend({
 
 window.bounty.HackDetailView = Backbone.View.extend({
 	tagName: 'div',
+	className: 'detail',
 	template: '\
 		<h2>{{ name }}</h2> \
 		<h3>{{ abstract }}</h3> \
 		<p>{{{ description }}}</p> \
 		\
 		<div class="credits"> \
-			<p><span>Proposed by:</span> <a href="#user/{{author.username}}">{{author.username}}</a></p>\
+			<p><span>Proposed by:</span> <a href="#user/{{author.username}}">{{author.username}}</a> \
+				<span>On:</span> {{created}} \
+			</p>\
+			<p><span>Contributors: </span> \
+				{{#contributors}} \
+					<a href="#user/{{username}}">{{author.name}}</a> \
+				{{/contributors}} \
+			</p>\
+			<p><span>Liked by: </span> \
+				{{#liked_by}} \
+					<a href="#user/{{username}}">{{author.name}}</a> \
+				{{/liked_by}} \
+			</p>\
 		</div>\
 		\
 		<p><span>Tagged:</span> \
@@ -103,9 +132,12 @@ window.bounty.HackDetailView = Backbone.View.extend({
 		view = this.model.toJSON()
 		// todo: make this generic, so not every rendering function needs to implement their own call to Markdown.Converter
 		// todo: add markdown sanitizer
-		converter = new Markdown.Converter()
+		var converter = new Markdown.Converter()
 		view.description = converter.makeHtml(view.description)
 		this.$el.html(Mustache.render(this.template, view))
+
+		var controls = new window.bounty.HackControlsView({model: this.model})
+		this.$el.find('h2').before(controls.render().el)
 		
 		return this
 	},

@@ -15,8 +15,10 @@
 	<body>
 		{% block masthead %}
 			<div id="masthead">
-				<h1>{% block pagetitle %}<a href="/">Bounty Board</a>{% endblock pagetitle %}</h1>
-				<h2><a href="http://www.meetup.com/San-Francisco-Python-Hack-Night/">SF Python Hack Night</a></h2>
+				<div id="masthead-container">
+					<h2><a href="http://www.meetup.com/San-Francisco-Python-Hack-Night/">SF Python Hack Night</a></h2>
+					<h1>{% block pagetitle %}<a href="/">Bounty Board</a>{% endblock pagetitle %}</h1>
+				</div>
 			</div>
 		{% endblock masthead %}
 

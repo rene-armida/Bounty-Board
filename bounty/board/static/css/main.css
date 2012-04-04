@@ -16,23 +16,20 @@ a, a:visited {
 #masthead h1, #masthead h2 {
 	font-size: 12px;
 	font-weight: bold;
-	margin: 5px;
+	margin: 5px 0;
 	text-transform: uppercase;
 	letter-spacing: 1.6px;
 }
 
-#masthead h1 {
-	margin-left: 20px;
+#masthead-container, #content {
+	min-width: 300px;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
 #masthead h2 {
-	position: absolute;
-	right: 20px;
-	top: 6px;
-}
-
-#content { 
-	margin: 0 20px 0 20px;
+	float: right;
+	margin: 0;
 }
 
 #hacklist {
@@ -43,7 +40,7 @@ a, a:visited {
 }
 
 #hacklist li {
-	padding: 12px 20px;
+	padding: 12px 0;
 }
 
 #hacklist h2 {
@@ -63,4 +60,8 @@ span {
 
 .controls {
 	float: right;
+}
+
+.detail h3 {
+	font-style: italic;
 }
