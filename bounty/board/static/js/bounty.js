@@ -19,44 +19,66 @@ window.bounty.HackCollection = Backbone.Collection.extend({
 
 // views
 window.bounty.HackListView = Backbone.View.extend({
-	tagName: 'ul',
-	id: 'hacklist',
+	tagName: 'div',
+	template: '\
+		<h1>Hacks</h1> \
+		<ul id="hacklist"></ul>',
 
 	initialize: function() {
-		this.model.bind("reset", this.render, this);
+		this.model.bind("reset", this.render, this)
 	},
 
 	render: function(eventName) {
+		this.$el.html(this.template)
+
+		ul = this.$el.find('#hacklist')
 		_.each(this.model.models, function(hack) {
-			// pass detailView down to list item views
-			this.$el.append(new window.bounty.HackListItemView({model:hack, detailView: this.options.detailView}).render().el);
-		}, this);
-		return this;
+			ul.append(new window.bounty.HackListItemView({model:hack}).render().el)
+		}, this)
+
+		this.$el.find('h1').before(new window.bounty.HackListControlsView().render().el)
+
+		return this
 	}
+})
+
+window.bounty.HackListControlsView = Backbone.View.extend({
+	tagName: 'div',
+	className: 'controls',
+	template: '\
+		<select name=""><option>All</option><option>Most popular</option><option>Next Meetup</option></select> \
+		<button>New</button>',
+
+	render: function(eventName) {
+		this.$el.html(this.template)
+		return this
+	}
+
 })
 
 window.bounty.HackListItemView = Backbone.View.extend({
 	tagName: 'li',
-	template: '<h2>{{ name }}</h2><p>{{ abstract }}</p>',
+	template: '\
+		<h2>{{ name }}</h2>\
+		<p>By <a href="#user/{{author.username}}">{{author.first_name}} {{author.last_name}}</a></p>\
+		<p>{{ abstract }}</p>',
 
 	render: function(eventName) {
 		this.$el.html(Mustache.render(this.template, this.model.toJSON()))
 		return this
 	},
 
-	highlight: function() {
-		// unhighlight any previously-highlighted elements
-		$('.highlight').removeClass('highlight')
+	hack_url: function() {
+		// todo: add slug
+		return 'hack/' + this.model.get('id')
+	},
 
-		// style the element
-		this.$el.addClass('highlight')
-
-		// poke the detail view into refreshing
-		this.options.detailView.newSelection(this.model)
+	trigger_detail: function() {
+		window.bounty.app.navigate(this.hack_url(), {trigger: true})
 	},
 
 	events: {
-		"click": "highlight",
+		"click": "trigger_detail",
 	},
 })
 
@@ -81,16 +103,11 @@ window.bounty.HackDetailView = Backbone.View.extend({
 		view = this.model.toJSON()
 		// todo: make this generic, so not every rendering function needs to implement their own call to Markdown.Converter
 		// todo: add markdown sanitizer
-		converter = new Markdown.Converter();
+		converter = new Markdown.Converter()
 		view.description = converter.makeHtml(view.description)
 		this.$el.html(Mustache.render(this.template, view))
 		
 		return this
-	},
-
-	newSelection: function(hack) {
-		this.model = hack
-		this.render()
 	},
 })
 
@@ -113,18 +130,17 @@ window.bounty.home_view = function() {
 			'': 'list',
 			'user/:username': 'profile',
 			'tag/:tagname': 'tag',
+			'hack/:id': 'hack_detail',
+		},
+
+		initialize: function() {
+			this.hackList = new window.bounty.HackCollection()
+			this.hackList.fetch()
 		},
 
 		list: function() {
-			// create the detail view and hang on to a reference to it
-			this.hackDetailView = new window.bounty.HackDetailView({el: $('#rcol')})
-			
-			this.hackList = new window.bounty.HackCollection()
-			// provide detail view to hack list, so it can communicate with it when the selection changes
-			this.hackListView = new window.bounty.HackListView({model: this.hackList, detailView: this.hackDetailView})
-			this.hackList.fetch()
-			$('#lcol').append(this.hackListView.render().el);
-
+			this.hackListView = new window.bounty.HackListView({model: this.hackList})
+			$('#content').empty().append(this.hackListView.render().el);
 		},
 
 		profile: function(username) {
@@ -135,10 +151,16 @@ window.bounty.home_view = function() {
 		tag: function(tagname) {
 			// show hacks associatde with a tag
 			alert('AppRouter#tag: implement me')
-		}
+		},
+
+        hack_detail: function(id) {
+            // show the details of one hack
+            this.hackDetailView = new window.bounty.HackDetailView({model: this.hackList.get(id)})
+            $('#content').empty().append(this.hackDetailView.render().el)
+        },
 	})
 
 	// run it
-	var app = new AppRouter()
+	window.bounty.app = new AppRouter()
 	Backbone.history.start()
 }

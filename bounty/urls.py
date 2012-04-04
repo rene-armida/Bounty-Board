@@ -1,3 +1,4 @@
+import django.db.models
 from django.conf.urls.defaults import patterns, include, url
 from django.shortcuts import redirect
 from bounty.board import models
@@ -10,8 +11,9 @@ admin.autodiscover()
 
 # REST resources
 class HackResource(ModelResource):
-	model = models.Hack
-
+    model = models.Hack
+    # by default, exclude is ('id', 'pk'); we want ID exposed
+    exclude = []
 
 urlpatterns = patterns('bounty.board.views',
     url(r'^$', 'home.home'),

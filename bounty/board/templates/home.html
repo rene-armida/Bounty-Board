@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 
 {% block contents %}
-
-<div id="rcol">
-</div>
-<div id="lcol">
-	<button id="add-hack">New hack</button>
-	<h1>Hacks</h1>
-</div>
-
 {% comment %}
 FIXME: moving this stuff into the doc's head causes problems, like '$' not being defined.
 {% endcomment %}
@@ -26,4 +18,4 @@ $(document).ready( function() {
 	bounty.home_view()
 });
 </script>
-{% endblock %}
+{% endblock contents %}
