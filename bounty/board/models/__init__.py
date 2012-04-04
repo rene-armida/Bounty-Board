@@ -40,6 +40,7 @@ class Hack(models.Model):
 		blank=True)
 	author = models.ForeignKey(django.contrib.auth.models.User, help_text='Proposer of this project')
 	tags = models.ManyToManyField('Tag', blank=True)
+	created = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
 		return self.name
