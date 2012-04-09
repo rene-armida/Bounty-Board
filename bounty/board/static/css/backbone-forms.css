@@ -32,6 +32,10 @@
         color: #999;
     }
 
+        .bbf-field .bbf-help a {
+            color: #999;
+        }
+
     .bbf-field.bbf-error .bbf-editor {
         outline: 1px solid red;
     }

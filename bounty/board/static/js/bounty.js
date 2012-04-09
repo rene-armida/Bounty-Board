@@ -5,9 +5,18 @@ window.bounty = {}
 // models
 window.bounty.Hack = Backbone.Model.extend({
 	schema: {
-		name: {},
-		abstract: {},
-		description: {},
+		name: {
+			validators: ['required'],
+		},
+		abstract: {
+			validators: ['required'],
+			help: 'Short and sweet',
+		},
+		description: {
+			type: 'TextArea',
+			help: '<a target="_blank" href="http://daringfireball.net/projects/markdown/">Markdown</a>-enabled',
+			validators: ['required'],
+		},
 	},
 })
 
@@ -51,6 +60,10 @@ window.bounty.HackListControlsView = Backbone.View.extend({
 
 	render: function(eventName) {
 		this.$el.html(this.template)
+		// bind "New" to #hack/new
+		this.$el.find('button').click(function() {
+			window.bounty.app.navigate('hack/new', {trigger: true})
+		})
 		return this
 	}
 
@@ -143,13 +156,30 @@ window.bounty.HackDetailView = Backbone.View.extend({
 	},
 })
 
-window.bounty.HackEditView = Backbone.View.extend({
+window.bounty.HackFormView = Backbone.View.extend({
+	template: '\
+		<h1>New Hack</h1> \
+		<form></form> \
+		<button>Save</button> \
+		',
+
 	render: function() {
 		var form = new Backbone.Form({
 			model: new window.bounty.Hack(),
 		}).render()
 
-		this.$el.append(form.el)
+		this.$el.html(this.template)
+		this.$el.find('form').replaceWith(form.el)
+		this.$el.find('button').click(function() {
+			var errors = form.commit()
+			if(!errors) {
+				// add the new model instance to the backing collection
+				window.bounty.app.hackList.add(form.model)
+				// trigger save
+				form.model.save()
+			}
+		})
+
 		return this
 	},
 })
@@ -162,6 +192,7 @@ window.bounty.home_view = function() {
 			'': 'list',
 			'user/:username': 'profile',
 			'tag/:tagname': 'tag',
+			'hack/new': 'hack_new',
 			'hack/:id': 'hack_detail',
 		},
 
@@ -190,6 +221,12 @@ window.bounty.home_view = function() {
             this.hackDetailView = new window.bounty.HackDetailView({model: this.hackList.get(id)})
             $('#content').empty().append(this.hackDetailView.render().el)
         },
+
+        hack_new: function() {
+        	// form for creating a new hack
+        	var hackFormView = new window.bounty.HackFormView()
+        	$('#content').empty().append(hackFormView.render().el)
+        }
 	})
 
 	// run it
