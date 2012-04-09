@@ -117,7 +117,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djangorestframework',
+    'tastypie',
     'django.contrib.admin',
     'django_nose',
     'board',

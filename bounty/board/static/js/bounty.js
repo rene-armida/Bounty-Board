@@ -23,7 +23,7 @@ window.bounty.Hack = Backbone.Model.extend({
 // collections
 window.bounty.HackCollection = Backbone.Collection.extend({
 	model: window.bounty.Hack,
-	url: '/api/hacks',
+	url: '/api/Hack',
 })
 
 // views

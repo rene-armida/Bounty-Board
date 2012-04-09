@@ -4,6 +4,7 @@ from django.db import models
 import django.contrib.auth.models
 from django.core.signals import request_started
 from django.dispatch import receiver
+from tastypie.models import create_api_key
 
 # signals
 @receiver(request_started)
@@ -28,6 +29,9 @@ def monkey_patch_redirect_uri(sender, **kwargs):
 	    return self._redirect_uri.replace('http://', 'https://') if self._redirect_uri.startswith('http://') else self._redirect_uri
 
 	social_auth.backends.BaseOAuth2.redirect_uri = property(get_redirect_uri, set_redirect_uri)
+
+# tastypie API key auto-generation
+models.signals.post_save.connect(create_api_key, sender=django.contrib.auth.models.User)
 
 # models
 
